@@ -19,14 +19,32 @@ export class RegisterComponent {
   private toast = inject(ToastService);
   private loadingService = inject(LoadingService);
 
+  showPassword = false;
+  errorMessage = '';
+  loading = false;
+  successMessage = '';
+
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  errorMessage = '';
-  loading = false;
-  successMessage = '';
+  get passwordStrength(): number {
+    const val = this.form.get('password')?.value ?? '';
+    let score = 0;
+    if (val.length >= 6) score++;
+    if (val.length >= 10) score++;
+    if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+    return score;
+  }
+
+  get passwordStrengthLabel(): string {
+    const s = this.passwordStrength;
+    if (s === 1) return 'Lemah';
+    if (s === 2) return 'Sedang';
+    if (s >= 3) return 'Kuat';
+    return '';
+  }
 
   async onSubmit() {
     if (this.form.invalid) return;

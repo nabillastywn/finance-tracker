@@ -49,3 +49,5 @@ Thumbs.db
 # ENV (WAJIB)
 .env
 .env.*
+package-lock.json
+package.json

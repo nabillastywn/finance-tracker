@@ -1,34 +1,121 @@
-<div class="auth-container">
-    <div class="auth-card">
-        <h2 class="center">Daftar</h2>
+<div class="auth-wrapper">
 
-        <div class="success-box" *ngIf="successMessage">
-            <p>{{ successMessage }}</p>
-            <a routerLink="/login">Ke halaman login</a>
+    <!-- Left panel -->
+    <div class="auth-left">
+        <div class="auth-left-content">
+            <div class="auth-logo">
+                <span class="logo-icon">
+                    <i class="pi pi-wallet"></i>
+                </span>
+                <span class="logo-text">Finance Tracker</span>
+            </div>
+            <h1 class="auth-left-title">Mulai perjalanan<br />finansialmu.</h1>
+            <p class="auth-left-desc">Dewasa itu ketika kita bisa mengontrol apa yang masuk dan apa yang keluar.
+            </p>
+            <!-- <div class="auth-features">
+                <div class="auth-feature-item">
+                    <i class="pi pi-check-circle"></i>
+                    <span>Daftar dalam 30 detik</span>
+                </div>
+                <div class="auth-feature-item">
+                    <i class="pi pi-check-circle"></i>
+                    <span>Data tersimpan aman di cloud</span>
+                </div>
+                <div class="auth-feature-item">
+                    <i class="pi pi-check-circle"></i>
+                    <span>Akses dari mana saja</span>
+                </div>
+                <div class="auth-feature-item">
+                    <i class="pi pi-check-circle"></i>
+                    <span>100% gratis selamanya</span>
+                </div>
+            </div> -->
         </div>
-
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!successMessage">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" formControlName="email" placeholder="email@contoh.com" />
-                <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
-                    Email tidak valid
-                </span>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" formControlName="password" placeholder="Minimal 6 karakter" />
-                <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
-                    Password minimal 6 karakter
-                </span>
-            </div>
-            <span class="error" *ngIf="errorMessage">{{ errorMessage }}</span>
-            <button type="submit" [disabled]="loading">
-                <span *ngIf="loading" class="btn-spinner">Mendaftar...</span>
-                <span *ngIf="!loading">Daftar</span>
-            </button>
-        </form>
-
-        <p *ngIf="!successMessage">Sudah punya akun? <a routerLink="/login">Masuk di sini</a></p>
     </div>
+
+    <!-- Right panel -->
+    <div class="auth-right">
+        <div class="auth-card">
+
+            <div class="auth-card-header">
+                <h2 class="center">Daftar</h2>
+            </div>
+
+            <div class="success-box" *ngIf="successMessage">
+                <i class="pi pi-check-circle"></i>
+                <div>
+                    <p>{{ successMessage }}</p>
+                    <a routerLink="/login">Ke halaman login →</a>
+                </div>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!successMessage">
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-icon-wrapper">
+                        <i class="pi pi-envelope input-icon"></i>
+                        <input type="email" formControlName="email" placeholder="email@contoh.com" />
+                    </div>
+                    <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+                        Email tidak valid
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-icon-wrapper">
+                        <i class="pi pi-lock input-icon"></i>
+                        <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                            placeholder="Minimal 6 karakter" />
+                        <i class="pi input-icon-right" [class.pi-eye]="!showPassword"
+                            [class.pi-eye-slash]="showPassword" (click)="showPassword = !showPassword">
+                        </i>
+                    </div>
+                    <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+                        Password minimal 6 karakter
+                    </span>
+                </div>
+
+                <!-- Password strength -->
+                <div class="password-strength" *ngIf="form.get('password')?.value">
+                    <div class="strength-bars">
+                        <div class="strength-bar" [class.active]="passwordStrength >= 1"
+                            [class.weak]="passwordStrength === 1" [class.medium]="passwordStrength === 2"
+                            [class.strong]="passwordStrength >= 3"></div>
+                        <div class="strength-bar" [class.active]="passwordStrength >= 2"
+                            [class.medium]="passwordStrength === 2" [class.strong]="passwordStrength >= 3"></div>
+                        <div class="strength-bar" [class.active]="passwordStrength >= 3"
+                            [class.strong]="passwordStrength >= 3"></div>
+                    </div>
+                    <span class="strength-label" [class.weak]="passwordStrength === 1"
+                        [class.medium]="passwordStrength === 2" [class.strong]="passwordStrength >= 3">
+                        {{ passwordStrengthLabel }}
+                    </span>
+                </div>
+
+                <div class="error-box" *ngIf="errorMessage">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span>{{ errorMessage }}</span>
+                </div>
+
+                <button type="submit" [disabled]="loading" class="btn-submit">
+                    <span *ngIf="loading" class="btn-spinner">Mendaftar...</span>
+                    <span *ngIf="!loading">
+                        <i class="pi pi-user-plus"></i> Daftar Sekarang
+                    </span>
+                </button>
+            </form>
+
+            <div class="auth-divider" *ngIf="!successMessage">
+                <span>atau</span>
+            </div>
+
+            <div class="auth-card-footer" *ngIf="!successMessage">
+                <p>Sudah punya akun?
+                    <a routerLink="/login">Masuk di sini</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
 </div>
