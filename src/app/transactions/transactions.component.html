@@ -94,7 +94,7 @@
                 <input type="date" formControlName="date" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-cancel" (click)="closeModal()">Batal</button>
+                <button type="button" class="btn-danger-outline" (click)="closeModal()">Batal</button>
                 <button type="submit" [disabled]="loading">
                     <span *ngIf="loading" class="btn-spinner">Menyimpan...</span>
                     <span *ngIf="!loading">{{ isEditing ? 'Simpan Perubahan' : 'Tambah' }}</span>

@@ -75,7 +75,7 @@
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-cancel" (click)="closeModal()">Batal</button>
+                <button type="button" class="btn-danger-outline" (click)="closeModal()">Batal</button>
                 <button type="submit" [disabled]="loading">
                     {{ loading ? 'Menyimpan...' : (isEditing ? 'Simpan Perubahan' : 'Tambah') }}
                 </button>
