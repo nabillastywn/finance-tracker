@@ -1,0 +1,18 @@
+<aside class="sidebar">
+    <div class="sidebar-brand">Finance Tracker</div>
+    <nav>
+        <a routerLink="/dashboard" routerLinkActive="active">
+            <span class="nav-icon pi pi-chart-scatter"></span> Dashboard
+        </a>
+        <a routerLink="/categories" routerLinkActive="active">
+            <span class="nav-icon pi pi-bars"></span> Kategori
+        </a>
+        <a routerLink="/transactions" routerLinkActive="active">
+            <span class="nav-icon pi pi-wallet"></span> Transaksi
+        </a>
+        <a routerLink="/profile" routerLinkActive="active">
+            <span class="nav-icon pi pi-user"></span> Profil
+        </a>
+    </nav>
+    <button class="btn-danger-outline" (click)=" logout()">Keluar</button>
+</aside>

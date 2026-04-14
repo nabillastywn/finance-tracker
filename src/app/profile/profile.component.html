@@ -1,0 +1,77 @@
+<main class="main-content">
+    <div class="page-header">
+        <h1>Profil</h1>
+    </div>
+
+    <div class="profile-grid">
+
+        <!-- Info & Edit -->
+        <div class="section">
+            <div class="profile-avatar-row">
+                <div class="profile-avatar">{{ avatarLetter }}</div>
+                <div class="profile-meta">
+                    <p class="profile-name">{{ user?.displayName || 'Belum diatur' }}</p>
+                    <p class="profile-email">{{ user?.email }}</p>
+                    <span class="profile-badge" [class.verified]="user?.emailVerified">
+                        {{ user?.emailVerified ? 'Email terverifikasi' : 'Email belum terverifikasi' }}
+                    </span>
+                </div>
+            </div>
+
+            <hr class="divider" />
+
+            <h2 class="section-subtitle">Edit nama tampilan</h2>
+            <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+                <div class="form-group">
+                    <label>Nama tampilan</label>
+                    <input type="text" formControlName="displayName" placeholder="Masukkan nama kamu" />
+                    <span class="error"
+                        *ngIf="profileForm.get('displayName')?.touched && profileForm.get('displayName')?.invalid">
+                        Nama wajib diisi
+                    </span>
+                </div>
+                <button type="submit" [disabled]="loadingProfile">
+                    <span *ngIf="loadingProfile" class="btn-spinner">Menyimpan...</span>
+                    <span *ngIf="!loadingProfile">Simpan Perubahan</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Hapus Akun -->
+        <div class="section danger-section">
+            <h2 class="section-subtitle danger-title">Hapus Akun</h2>
+            <p class="danger-desc">
+                Akun yang dihapus tidak bisa dipulihkan. Semua data transaksi dan kategori kamu akan hilang permanen.
+            </p>
+            <button class="btn-danger-outline" (click)="openDeleteModal()">Hapus Akun Saya</button>
+        </div>
+
+    </div>
+</main>
+
+<!-- Modal Konfirmasi Hapus Akun -->
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Konfirmasi Hapus Akun</h2>
+            <button class="modal-close" (click)="closeDeleteModal()">✕</button>
+        </div>
+        <p class="delete-warning">Masukkan password kamu untuk mengkonfirmasi penghapusan akun.</p>
+        <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()">
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" formControlName="password" placeholder="Masukkan password" />
+                <span class="error" *ngIf="deleteForm.get('password')?.touched && deleteForm.get('password')?.invalid">
+                    Password minimal 6 karakter
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" (click)="closeDeleteModal()">Batal</button>
+                <button type="submit" class="btn-danger" [disabled]="loadingDelete">
+                    <span *ngIf="loadingDelete" class="btn-spinner">Menghapus...</span>
+                    <span *ngIf="!loadingDelete">Hapus Akun</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

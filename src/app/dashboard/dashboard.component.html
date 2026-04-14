@@ -1,0 +1,66 @@
+<main class="main-content">
+    <h1>Dashboard</h1>
+
+    <!-- Summary cards -->
+    <div class="cards">
+        <div class="card balance">
+            <p class="card-label">Saldo</p>
+            <p class="card-value">{{ formatCurrency(balance) }}</p>
+        </div>
+        <div class="card income">
+            <p class="card-label">Total Pemasukan</p>
+            <p class="card-value">{{ formatCurrency(totalIncome) }}</p>
+        </div>
+        <div class="card expense">
+            <p class="card-label">Total Pengeluaran</p>
+            <p class="card-value">{{ formatCurrency(totalExpense) }}</p>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="chart-grid">
+        <div class="section">
+            <h2 class="section-title">Pemasukan vs Pengeluaran (6 Bulan)</h2>
+            <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar">
+            </canvas>
+        </div>
+        <div class="section">
+            <h2 class="section-title">Pengeluaran per Kategori</h2>
+            <div class="empty" *ngIf="doughnutChartData.labels?.length === 0">
+                Belum ada data pengeluaran.
+            </div>
+            <canvas baseChart *ngIf="doughnutChartData.labels!.length > 0" [data]="doughnutChartData"
+                [options]="doughnutChartOptions" type="doughnut">
+            </canvas>
+        </div>
+    </div>
+
+    <!-- Recent transactions -->
+    <div class="section">
+        <div class="section-header">
+            <h2>Transaksi Terbaru</h2>
+            <a routerLink="/transactions">Lihat semua</a>
+        </div>
+
+        <div class="empty" *ngIf="recentTransactions.length === 0">
+            Belum ada transaksi. <a routerLink="/transactions">Tambah sekarang</a>
+        </div>
+
+        <div class="transaction-list" *ngIf="recentTransactions.length > 0">
+            <div class="transaction-item" *ngFor="let t of recentTransactions">
+                <div class="transaction-info">
+                    <span class="transaction-category">{{ t.category }}</span>
+                    <span class="transaction-desc">{{ t.description }}</span>
+                </div>
+                <div class="transaction-right">
+                    <span class="transaction-amount" [class.income]="t.type === 'income'"
+                        [class.expense]="t.type === 'expense'">
+                        {{ t.type === 'income' ? '+' : '-' }}{{ formatCurrency(t.amount) }}
+                    </span>
+                    <span class="transaction-date">{{ t.date | date:'dd MMM yyyy' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>

@@ -1,0 +1,105 @@
+<main class="main-content">
+    <div class="page-header">
+        <h1>Transaksi</h1>
+        <button (click)="openAddModal()">+ Tambah Transaksi</button>
+    </div>
+
+    <!-- Filter -->
+    <div class="filters">
+        <div class="filter-group">
+            <label>Tipe</label>
+            <select (change)="onFilterType($any($event.target).value)">
+                <option value="all">Semua</option>
+                <option value="income">Pemasukan</option>
+                <option value="expense">Pengeluaran</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Kategori</label>
+            <select (change)="onFilterCategory($any($event.target).value)">
+                <option value="all">Semua</option>
+                <option *ngFor="let c of categories" [value]="c.name">{{ c.name }}</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Transaction list -->
+    <div class="section">
+        <div class="empty" *ngIf="filteredTransactions.length === 0">
+            Belum ada transaksi.
+        </div>
+
+        <div class="transaction-item" *ngFor="let t of filteredTransactions">
+            <div class="transaction-info">
+                <span class="transaction-category">{{ t.category || '-' }}</span>
+                <span class="transaction-desc">{{ t.description || '-' }}</span>
+                <span class="transaction-date">{{ t.date | date:'dd MMM yyyy' }}</span>
+            </div>
+            <div class="transaction-right">
+                <span class="transaction-amount" [class.income]="t.type === 'income'"
+                    [class.expense]="t.type === 'expense'">
+                    {{ t.type === 'income' ? '+' : '-' }}{{ t.amount ? formatCurrency(t.amount) : 'Rp 0' }}
+                </span>
+                <div class="action-btns">
+                    <button class="btn-edit" (click)="openEditModal(t)">Edit</button>
+                    <button class="btn-delete" (click)="deleteTransaction(t.id!)">Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal Tambah / Edit -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>{{ isEditing ? 'Edit Transaksi' : 'Tambah Transaksi' }}</h2>
+            <button class="modal-close" (click)="closeModal()">✕</button>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label>Tipe</label>
+                <select formControlName="type">
+                    <option value="income">Pemasukan</option>
+                    <option value="expense">Pengeluaran</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nominal</label>
+                <input type="number" formControlName="amount" placeholder="Contoh: 500000" />
+                <span class="error" *ngIf="form.get('amount')?.touched && form.get('amount')?.invalid">
+                    Nominal harus lebih dari 0
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Kategori</label>
+                <select formControlName="category">
+                    <option value="" disabled>Pilih kategori</option>
+                    <option *ngFor="let c of filteredCategories" [value]="c.name">{{ c.name }}</option>
+                </select>
+                <span class="error" *ngIf="form.get('category')?.touched && form.get('category')?.invalid">
+                    Pilih kategori
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Deskripsi</label>
+                <input type="text" formControlName="description" placeholder="Contoh: Makan siang" />
+                <span class="error" *ngIf="form.get('description')?.touched && form.get('description')?.invalid">
+                    Deskripsi wajib diisi
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Tanggal</label>
+                <input type="date" formControlName="date" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" (click)="closeModal()">Batal</button>
+                <button type="submit" [disabled]="loading">
+                    <span *ngIf="loading" class="btn-spinner">Menyimpan...</span>
+                    <span *ngIf="!loading">{{ isEditing ? 'Simpan Perubahan' : 'Tambah' }}</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

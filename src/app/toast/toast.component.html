@@ -1,0 +1,11 @@
+<div class="toast-container">
+    <div class="toast" *ngFor="let toast of toastService.toasts()" [class]="'toast toast-' + toast.type"
+        (click)="toastService.remove(toast.id)">
+        <span class="toast-icon">
+            <ng-container *ngIf="toast.type === 'success'">✓</ng-container>
+            <ng-container *ngIf="toast.type === 'error'">✕</ng-container>
+            <ng-container *ngIf="toast.type === 'info'">i</ng-container>
+        </span>
+        <span>{{ toast.message }}</span>
+    </div>
+</div>

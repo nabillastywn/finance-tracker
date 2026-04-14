@@ -1,0 +1,27 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="center">Masuk</h2>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" formControlName="email" placeholder="Masukkan email anda" />
+                <span class=" error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+                    Email tidak valid
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" formControlName="password" placeholder="Masukkan password anda" />
+                <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+                    Password minimal 6 karakter
+                </span>
+            </div>
+            <span class="error" *ngIf="errorMessage">{{ errorMessage }}</span>
+            <button type="submit" [disabled]="loading">
+                <span *ngIf="loading" class="btn-spinner">Masuk...</span>
+                <span *ngIf="!loading">Masuk</span>
+            </button>
+        </form>
+        <p>Belum punya akun? <a class="green-text" routerLink="/register">Daftar di sini</a></p>
+    </div>
+</div>
