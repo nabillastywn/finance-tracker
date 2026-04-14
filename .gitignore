@@ -51,5 +51,5 @@ Thumbs.db
 .env.*
 
 # Angular environment (opsional tapi disarankan kalau ada key)
-src/app/environments/environment.ts
-src/app/environments/environment.prod.ts
+src/environments/environment.ts
+src/environments/environment.prod.ts
